@@ -8,6 +8,10 @@
 var balls;
 balls = [];
 value = 0;
+var rectangle;
+
+var cols; 
+
 
 ////////////////////////////////////////////////////
 function setup() {
@@ -25,7 +29,17 @@ function setup() {
 }
 ////////////////////////////////////////////////////
 function draw() {
+  rectMode(CENTER);
+  //changeable background color
   background(value);
+
+  //draws red rectagnle beneath the balls
+  fill(150, 0, 0)
+  rectangle = rect(width/2, height/2, 150, 150);
+
+  var cols = color(0, 153, 255); 
+  cols.setAlpha(90 + 90 * sin(1000));
+
   // for loop that draws each ball in the 'balls' array
   for (var i = 0; i < balls.length; i++) {
     var gravity = createVector(0, 0.1);
@@ -35,14 +49,16 @@ function draw() {
     friction.mult(0.01);
     balls[i].applyForce(friction);
     balls[i].applyForce(gravity);
-
     balls[i].run()
     //console.log(balls[i])
   }
 
-  //add button option title
+  //add button options title
   addTitle();
 
+
+  //rectangle
+  
   //ball.run();
 }
 //////////////////////////////////////////////////////
@@ -53,20 +69,36 @@ class Ball {
     this.location = new createVector(x, y);
     this.acceleration = new createVector(0, 0);
     this.size = random(10, 40);
+
+    //rectangle vector
+    this.rect = new createVector(width/2, height/2);
+    this.rectSize = (150, 100);
+
+    // initial ball color (changes on impact in  checkColission)
+    this.color = color(0, 153, 255); 
+    this.color.setAlpha(90 + 90 * sin(1000));
   }
 
   run(){
     this.draw();
     this.move();
     this.bounce();
+    this.checkCollision(); //checks colission and updates the color
   }
 
   draw(){
-    var ballColor = color(0, 153, 255);
-    ballColor.setAlpha(90 + 90 * sin(1000));
-    fill(ballColor);
+    fill(this.color);
     noStroke();
     ellipse(this.location.x, this.location.y, this.size, this.size);
+  }
+
+  checkCollision() {
+    if (dist(this.rect.x, this.rect.y,this.location.x, this.location.y)<this.rectSize) {
+      print("colission");
+      //change color after colission
+      this.color = color(255); 
+      this.color.setAlpha(90 + 90 * sin(1000));
+    }
   }
 
   move(){
