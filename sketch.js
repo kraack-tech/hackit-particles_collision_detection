@@ -96,7 +96,7 @@ class Ball {
     if (dist(this.rect.x, this.rect.y,this.location.x, this.location.y)<this.rectSize) {
       print("colission");
       //change color after colission
-      this.color = color(255); 
+      this.color = color(128, 255, 191); 
       this.color.setAlpha(90 + 90 * sin(1000));
     }
   }
